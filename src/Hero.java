@@ -7,6 +7,7 @@
  */
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * This abstract class contains all of the necessary instance methods
@@ -21,6 +22,7 @@ public abstract class Hero extends DungeonCharacter {
     private int myNumberOfAttacks;
     private int myCharacterLocationX;
     private int myCharacterLocationY;
+    private ArrayList<String> mySatchel = new ArrayList<>();
 
     /**
      * This abstract method initializes the values for all for
@@ -85,6 +87,12 @@ public abstract class Hero extends DungeonCharacter {
      */
     protected int specialDamageGenerator() {
         return super.damageRangeCalculator(mySpecialSkill_MinDamage, mySpecialSkill_MaxDamage);
+    }
+    protected void healingPotion() {
+        super.setMyCharacter_HealthPoints(randomGen.nextInt(20));
+    }
+    protected void heroTakesDamage() {
+        super.setMyCharacter_HealthPoints(-randomGen.nextInt(30));
     }
 
     /**
@@ -294,6 +302,22 @@ public abstract class Hero extends DungeonCharacter {
         myCharacterLocationY = theY;
         myCharacterLocationX = theX;
     }
+    protected void addItem2Satchel(final String theItem) {
+        mySatchel.add(theItem);
+
+    }
+    protected void removeSatchelItem(final String theItem) {
+        mySatchel.remove(theItem);
+
+    }
+    protected ArrayList<String> getHeroSatchel(){
+        return mySatchel;
+    }
+    protected String showHeroStats(){
+        String stats = ("Health: " + super.getCharacter_HealthPoints());
+        return stats;
+    }
+
 
 }
 

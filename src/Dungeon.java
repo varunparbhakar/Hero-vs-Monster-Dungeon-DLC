@@ -1,129 +1,45 @@
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Dungeon {
-    public static void main(String[] args) {
-        ArrayList<ArrayList<Room>> myDungeon = new ArrayList<>();
-        Hero hero = new Warrior("Varun");
-        Scanner userInput = new Scanner(System.in);
-        int dungeonSize = 4;
+    private ArrayList<ArrayList<Room>> myDungeon;
+    private int myDungeonSize;
 
+    public Dungeon(final int theDungeonSize, final Hero theHero) {
+        myDungeonSize = theDungeonSize;
+        myDungeon = new ArrayList<>();
+        dungeonBuilder();
+        exitEnteranceMaker(myDungeon, theDungeonSize, theHero);
 
-        for (int i = 0; i < dungeonSize; i++) {
+    }
+    protected void dungeonBuilder() {
+        for (int i = 0; i < myDungeonSize; i++) {
             ArrayList<Room> row = new ArrayList<>();
-            for (int j = 0; j < dungeonSize; j++) {
+            for (int j = 0; j < myDungeonSize; j++) {
                 Room myNewRoom = new Room();
                 row.add(myNewRoom);
-
             }
             myDungeon.add(row);
-
         }
-        exitEnteranceMaker(myDungeon, dungeonSize, hero);
-
-        printDungeon(myDungeon);
-
-        for (int i = 0; i < 100; i++) {
-            System.out.println();
-            mover(userInput, hero, dungeonSize, myDungeon);
-
-        }
-
     }
-    public static void printDungeon (final ArrayList<ArrayList<Room>> theDungeon) {
-        for (ArrayList row: theDungeon) {
+
+    protected Room getContent(final int theY, final int theX) {
+        return myDungeon.get(theY).get(theX);
+    }
+    public String toString() {
+        String dungeonPrint = "";
+        for (ArrayList row: myDungeon) {
             for (Object myRoom : row) {
-                System.out.print(myRoom);
+                dungeonPrint += myRoom.toString();
             }
-            System.out.println();
+            dungeonPrint += "\n";
         }
-    }
-    public static void mover(final Scanner userInput, final Hero theHero, final int dungeonSize, final ArrayList<ArrayList<Room>> theDungeon) {
-        Point location = theHero.getCharacterLocation();
-        System.out.println(theHero.getCharacterLocation());
-        Room myRoom = theDungeon.get(theHero.getCharacterLocationY()).get(theHero.getCharacterLocationX());
-        myRoom.exploreTheRoom();
-        myRoom.setisPlayerinRoom(true);
-        printDungeon(theDungeon);
-
-
-        String direction = directionChecker(userInput, location, dungeonSize);
-        if (direction.equals("n")){
-            theHero.setCharacterLocationY(-1);
-        }
-        if (direction.equals("s")){
-            theHero.setCharacterLocationY(1);
-        }
-        if (direction.equals("e")){
-            theHero.setCharacterLocationX(1);
-        }
-        if (direction.equals("w")){
-            theHero.setCharacterLocationX(-1);
-        }
-        myRoom.setisPlayerinRoom(false);
-        printDungeon(theDungeon);
-        System.out.println(theHero.getCharacterLocation());
-
-
-
-
-    }
-    public static ArrayList<String> availableChoices(final Point theLocation, final int theSize) {
-        ArrayList<String> availableChoices = new ArrayList<>();
-        boolean north = theLocation.y > 0;
-        boolean south = theLocation.y < theSize-1;
-        boolean west = theLocation.x > 0;
-        boolean east = theLocation.x < theSize-1;
-        if (north) {
-            availableChoices.add("n");
-        }if (south) {
-            availableChoices.add("s");
-        }if (east) {
-            availableChoices.add("e");
-        }if (west) {
-            availableChoices.add("w");
-        }
-        return availableChoices;
-
+        return dungeonPrint ;
     }
 
 
-    public static String directionChecker(final Scanner userInput, final Point theLocation, final int theDungeonSize){
-        String choices = "Please select your movement(n for North, s for South, e for East, w for West): ";
-        ArrayList<String> choiceList = availableChoices(theLocation, theDungeonSize);
-        System.out.println(choiceList);
-        String direction = null;
-        boolean correctAnswer = false;
 
-        // Input Validation
-        while (!correctAnswer) {
-            System.out.print(choices);
-
-            if (userInput.hasNext()) {
-                direction = userInput.next();
-
-                if (direction.equals("n") || direction.equals("s") || direction.equals("w") || direction.equals("e")) {
-                    if (choiceList.contains(direction)){
-                        correctAnswer = true;
-                    }
-
-                } else {
-                    System.out.println("Please select the correct direction");
-
-                }
-
-            } else {
-                System.out.println("Invalid Input\n");
-                userInput.next();
-            }
-
-        }
-        return direction;
-    }
     public static void exitEnteranceMaker(final ArrayList<ArrayList<Room>> theDungeon, final int theDungeonSize, final Hero theHero ) {
         Random rand = new Random();
         boolean haveEnterance = false;
@@ -132,9 +48,9 @@ public class Dungeon {
         boolean have2ndCrown = false;
         int roomNumber;
         Room roomSetter;
-        while(!haveEnterance || !haveExit || !haveCrown || !have2ndCrown) {
+        while (!haveEnterance || !haveExit) {
             if (Math.random() < .1 && !haveEnterance) {
-                roomNumber = rand.nextInt(theDungeonSize-1);
+                roomNumber = rand.nextInt(theDungeonSize - 1);
                 roomSetter = theDungeon.get(0).get(roomNumber);
                 theHero.setCharacterLocation(roomNumber, 0);
                 roomSetter.setHasEnterance(true);
@@ -142,21 +58,64 @@ public class Dungeon {
             }
             if (Math.random() < .1 && !haveExit) {
 
-                roomSetter = theDungeon.get(theDungeonSize-1).get(rand.nextInt(theDungeonSize));
+                roomSetter = theDungeon.get(theDungeonSize - 1).get(rand.nextInt(theDungeonSize));
                 roomSetter.setHasExit(true);
                 haveExit = true;
             }
+        }
+        while (!haveCrown || !have2ndCrown) {
             if (Math.random() < .1 && !haveCrown) {
-                roomSetter = theDungeon.get(rand.nextInt(theDungeonSize-1)).get(rand.nextInt(theDungeonSize-1));
-                roomSetter.setHasMy_Crown(true);
-                haveCrown = true;
+                roomSetter = theDungeon.get(rand.nextInt(theDungeonSize - 1)).get(rand.nextInt(theDungeonSize - 1));
+                if (!roomSetter.getHasASecondCrown() && !roomSetter.getHasEnterance() && !roomSetter.getHasExit()) {
+                    roomSetter.setHasMy_Crown(true);
+                    roomSetter.addRoomInventory("Coding Crown");
+                    haveCrown = true;
+                }
+
             }
             if (Math.random() < .1 && !have2ndCrown) {
-                roomSetter = theDungeon.get(rand.nextInt(theDungeonSize-1)).get(rand.nextInt(theDungeonSize-1));
-                roomSetter.setHasMy_Crown(true);
-                have2ndCrown = true;
+                roomSetter = theDungeon.get(rand.nextInt(theDungeonSize - 1)).get(rand.nextInt(theDungeonSize - 1));
+                if (!roomSetter.getHasACrown() && !roomSetter.getHasEnterance() && !roomSetter.getHasExit()) {
+                    roomSetter.setHasMy_SecondCrown(true);
+                    roomSetter.addRoomInventory("Second Coding Crown");
+                    have2ndCrown = true;
+                }
             }
-        }
 
         }
     }
+    protected void visionPotionUser(final Point theLocation) {
+        Room dummyRoom = null;
+        ArrayList<Point> currentLocation = new ArrayList<>();
+        Point dummyPoint = (Point)(theLocation.clone());;
+        boolean north = dummyPoint.y - 1 >= 0;
+        boolean south = dummyPoint.y + 1 <= myDungeonSize-1;
+        boolean west = dummyPoint.x - 1 >= 0;
+        boolean east = dummyPoint.x + 1 <= myDungeonSize-1;
+        if (north) {
+            dummyPoint.translate(0,-1);
+            currentLocation.add(dummyPoint);
+            dummyPoint = (Point)(theLocation.clone());
+        }if (south) {
+            dummyPoint.translate(0,1);
+            currentLocation.add(dummyPoint);
+            dummyPoint = (Point)(theLocation.clone());
+        }if (east) {
+            dummyPoint.translate(1,0);
+            currentLocation.add(dummyPoint);
+            dummyPoint = (Point)(theLocation.clone());
+        }if (west) {
+            dummyPoint.translate(-1,0);
+            currentLocation.add(dummyPoint);
+            dummyPoint = (Point)(theLocation.clone());
+        }
+
+
+        for (Point local: currentLocation){
+            dummyRoom = myDungeon.get(local.y).get(local.x);
+            dummyRoom.exploreTheRoom();
+
+        }
+
+    }
+}
