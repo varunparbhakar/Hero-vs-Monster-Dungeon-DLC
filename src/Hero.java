@@ -23,6 +23,9 @@ public abstract class Hero extends DungeonCharacter {
     private int myCharacterLocationX;
     private int myCharacterLocationY;
     private ArrayList<String> mySatchel = new ArrayList<>();
+    private int myHealingPotions;
+    private int myVisionPotions;
+    private int myCrownPieces;
 
     /**
      * This abstract method initializes the values for all for
@@ -65,6 +68,9 @@ public abstract class Hero extends DungeonCharacter {
             specialSkill_MaxDamage_Validator(theC_SpecialSkill_MaxDamage);
         }
         setCharacterLocation(theCharacterX,theCharacterY);
+        myHealingPotions = 0;
+        myVisionPotions = 0;
+        myCrownPieces = 0;
 
 
     }
@@ -313,9 +319,35 @@ public abstract class Hero extends DungeonCharacter {
     protected ArrayList<String> getHeroSatchel(){
         return mySatchel;
     }
-    protected String showHeroStats(){
-        String stats = ("Health: " + super.getCharacter_HealthPoints());
-        return stats;
+    protected boolean hasBothCrowns() {
+        return (mySatchel.contains("Coding Crown") && mySatchel.contains("Second Coding Crown"));
+    }
+    protected int getMyHealingPotions(){
+        return myHealingPotions;
+    }
+    protected int getMyVisionPotions(){
+        return myVisionPotions;
+    }
+    protected int getMyCrownPieces(){
+        return myCrownPieces;
+    }
+    protected void addCrownPiece(){
+        myCrownPieces++;
+
+    }
+    protected  void addHealingPotion() {
+        myHealingPotions++;
+    }
+    protected void addVisionPotion(){
+        myVisionPotions++;
+    }
+    public String toString() {
+        String stats = ("Name: " + getCharacter_Name()
+                + "\nHealth: " + super.getCharacter_HealthPoints()
+                + "\nVision Potions found: " + myVisionPotions
+                + "\nHealing Potions found: " + myHealingPotions
+                + "\nCoding Crowns found: " + myCrownPieces);
+    return stats;
     }
 
 

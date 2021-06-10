@@ -26,6 +26,7 @@ public abstract class DungeonCharacter {
     private boolean myWinner;
 
 
+
     /**
      * This constructor initializes the major fields that are required for a dungeon
      * character.
@@ -208,7 +209,7 @@ public abstract class DungeonCharacter {
      * @return
      */
     protected final boolean alive() {
-        return !(myCharacter_HealthPoints == 0);
+        return !(myCharacter_HealthPoints <= 0);
     }
     //END OF GETTERS
 

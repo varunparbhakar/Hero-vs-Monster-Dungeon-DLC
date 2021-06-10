@@ -84,6 +84,15 @@ public class Dungeon {
 
         }
     }
+    protected void revealAll() {
+        Room dummyRoom;
+        for(int i = 0; i < myDungeonSize; i++){
+            for (int j = 0; j < myDungeonSize; j++) {
+                dummyRoom = myDungeon.get(i).get(j);
+                dummyRoom.exploreTheRoom();
+            }
+        }
+    }
     protected void visionPotionUser(final Point theLocation) {
         Room dummyRoom = null;
         ArrayList<Point> currentLocation = new ArrayList<>();
