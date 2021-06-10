@@ -15,7 +15,7 @@ public class Skeleton extends Monster {
      * for the Skeleton character
      * @param theC_Name (The character name)
      */
-    protected Skeleton(String theC_Name) {
+    protected Skeleton(final String theC_Name) {
         super(theC_Name,
                 100,
                 3,

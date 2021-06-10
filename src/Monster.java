@@ -157,13 +157,13 @@ public abstract class Monster extends DungeonCharacter {
     }
 
     /**
-     * This method validates the health regeration range.
+     * This method validates the health regeneration range.
      * @param theC_SMinDamage
      * @param theC_SMaxDamage
      * @return
      */
     protected final boolean healRangeValidator(final int theC_SMinDamage,
-                                                       final int theC_SMaxDamage) {
+                                               final int theC_SMaxDamage) {
         if (theC_SMinDamage > theC_SMaxDamage) {
             throw new IllegalArgumentException("The minimum special heal points cannot be greater than the maximum special heal points.");
         } else {

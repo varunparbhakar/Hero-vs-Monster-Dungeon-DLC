@@ -289,7 +289,7 @@ public abstract class DungeonCharacter {
      * This instance method determine if the character is a winner or not.
      * @param enemy (The enemy character)
      */
-    private void determineWinner(DungeonCharacter enemy) {
+    private void determineWinner(final DungeonCharacter enemy) {
         if (!enemy.alive()) {
             myWinner = true;
         }

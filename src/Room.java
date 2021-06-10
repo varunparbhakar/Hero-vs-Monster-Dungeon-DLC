@@ -150,7 +150,7 @@ public class Room {
      * This methods sets the hasMy_Entrance to the passed value.
      * @param theEntrance
      */
-    protected void setHasEnterance(final boolean theEntrance) {
+    protected void setHasEntrance(final boolean theEntrance) {
         setEmptyRoom();
         setMyDisplayIcon("I ");
         hasMy_Entrance = theEntrance;
@@ -178,7 +178,8 @@ public class Room {
      * @param theItem (The item being picked up)
      * @param theHero (The Hero)
      */
-    protected void pickUP(final String theItem, final Hero theHero){
+    protected void pickUP(final String theItem,
+                          final Hero theHero){
         if (myRoomInventory.size() != 0) {
             if (myRoomInventory.contains(theItem)){
                 theHero.addItem2Satchel(theItem);

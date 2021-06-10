@@ -61,7 +61,7 @@ public class DungeonAdventure {
      * @param theUserInput (Scanner)
      * @return
      */
-    public static boolean introduction(Scanner theUserInput) {
+    public static boolean introduction(final Scanner theUserInput) {
         System.out.println("------------------ Welcome!!! -------------------");
         System.out.println("---------------- Hear Ye Hear Ye ----------------");
         System.out.println("A long time ago, a warrior had challenged" +
@@ -191,7 +191,9 @@ public class DungeonAdventure {
      * @param theUserInput
      * @return (Boolean, if the player is on the exit or not)
      */
-    public static boolean isHeroAtExit(final Room theRoom, final Hero theHero, final Scanner theUserInput) {
+    public static boolean isHeroAtExit(final Room theRoom,
+                                       final Hero theHero,
+                                       final Scanner theUserInput) {
         if (theRoom.getHasExit()) {
             System.out.println("You are on the exit!");
             if (theHero.hasBothCrowns()) {
@@ -296,9 +298,10 @@ public class DungeonAdventure {
      * @return (Returns an updated list of the room)
      */
     public static ArrayList<String> checkRoom(final Hero theHero,
-                          final ArrayList<String> theRoomItems,
-                          final Monster theMonster,
-                          final Scanner theUserInput, final Dungeon theDungeon) {
+                                              final ArrayList<String> theRoomItems,
+                                              final Monster theMonster,
+                                              final Scanner theUserInput,
+                                              final Dungeon theDungeon) {
         ArrayList<String> copyList = (ArrayList)(theRoomItems.clone());
         for (String theItem: copyList) {
             if (theItem.equals("Monster!")){
@@ -331,7 +334,9 @@ public class DungeonAdventure {
      * @param theDungeonSize (The size of the dungeon)
      * @return (Validated direction that a user can go into)
      */
-        public static String directionChecker(final Scanner userInput, final Point theLocation, final int theDungeonSize){
+        public static String directionChecker(final Scanner userInput,
+                                              final Point theLocation,
+                                              final int theDungeonSize){
         String choices = "Please select your movement(n for North, s for South, e for East, w for West or k for Map Legend)";
         ArrayList<String> choiceList = availableChoices(theLocation, theDungeonSize);
         String direction = null;
@@ -373,7 +378,8 @@ public class DungeonAdventure {
      * @param theSize (The size of the dungeon)
      * @return (The list contains the valid directions that a user can take)
      */
-    public static ArrayList<String> availableChoices(final Point theLocation, final int theSize) {
+    public static ArrayList<String> availableChoices(final Point theLocation,
+                                                     final int theSize) {
         ArrayList<String> availableChoices = new ArrayList<>();
         boolean north = theLocation.y > 0;
         boolean south = theLocation.y < theSize-1;

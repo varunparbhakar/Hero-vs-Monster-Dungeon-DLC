@@ -15,7 +15,7 @@ public class Warrior extends Hero {
      * for the Warrior character
      * @param theC_Name (The character name)
      */
-    protected Warrior(String theC_Name) {
+    protected Warrior(final String theC_Name) {
 
         super(  theC_Name,
                 125,

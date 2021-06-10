@@ -24,7 +24,8 @@ public class Dungeon {
      * @param theDungeonSize
      * @param theHero
      */
-    public Dungeon(final int theDungeonSize, final Hero theHero) {
+    public Dungeon(final int theDungeonSize,
+                   final Hero theHero) {
         myDungeonSize = theDungeonSize;
         myDungeon = new ArrayList<>();
         dungeonBuilder();
@@ -71,7 +72,8 @@ public class Dungeon {
      * @param theX (The X coordinate)
      * @return (Room)
      */
-    protected Room getContent(final int theY, final int theX) {
+    protected Room getContent(final int theY,
+                              final int theX) {
         return myDungeon.get(theY).get(theX);
     }
 
@@ -97,7 +99,9 @@ public class Dungeon {
      * @param theDungeonSize
      * @param theHero
      */
-    public static void exitEntranceMaker(final ArrayList<ArrayList<Room>> theDungeon, final int theDungeonSize, final Hero theHero ) {
+    public static void exitEntranceMaker(final ArrayList<ArrayList<Room>> theDungeon,
+                                         final int theDungeonSize,
+                                         final Hero theHero ) {
         Random rand = new Random();
         boolean haveEntrance = false;
         boolean haveExit = false;
@@ -110,7 +114,7 @@ public class Dungeon {
                 roomNumber = rand.nextInt(theDungeonSize - 1);
                 roomSetter = theDungeon.get(0).get(roomNumber);
                 theHero.setCharacterLocation(roomNumber, 0);
-                roomSetter.setHasEnterance(true);
+                roomSetter.setHasEntrance(true);
                 haveEntrance = true;
             }
             if (Math.random() < .1 && !haveExit) {
