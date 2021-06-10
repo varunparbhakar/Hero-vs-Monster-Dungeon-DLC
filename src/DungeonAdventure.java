@@ -1,27 +1,59 @@
-import javax.xml.transform.Source;
+/*
+ * Varun Parbhakar
+ *
+ * TCSS-143
+ * Heroes VS Monster (Dungeon DLC)
+ */
 import java.awt.*;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * This is the main client class for the dungeon adventure game it contains
+ * the game player that initiates and continues with the game until the player decides to quit.
+ * @author Varun Parbhakar
+ */
 public class DungeonAdventure {
+    /**
+     * This main method initializes the dungeon, hero and the monster to prepare the game.
+     * @param args
+     */
     public static void main(String[] args) {
         Scanner userInput = new Scanner(System.in);
         if(introduction(userInput)) {
-            Hero hero = new Warrior(heroName(userInput));
-            Monster monster = new Skeleton("Null Pointer");
-            int myDungeonSize = 5;
-            Dungeon myDungeon = new Dungeon(myDungeonSize, hero);
+            boolean playAgain = false;
+            while(!playAgain) {
+                String name = heroName(userInput);
+
+                Hero hero = new Warrior(name);
+                Monster monster = new Skeleton("Null Pointer");
+                int myDungeonSize = 5;
+                Dungeon myDungeon = new Dungeon(myDungeonSize, hero);
+                if (name.equals("Varun") || name.equals("Bryce")) {
+                    myDungeon.setMyCheatEnabled();
+                }
 
 
-            while(hero.alive()) {
-                mover(userInput, hero, myDungeonSize, myDungeon, monster);
+                while(hero.alive()) {
+                    mover(userInput, hero, myDungeonSize, myDungeon, monster);
+
+                }
+                System.out.println("\nWould you like to play again?");
+                if (!yesORNo(userInput)) {
+                    playAgain = true;
+                }
 
             }
         }
     }
-    // return on this method
-    public static boolean introduction(Scanner userInput) {
+
+    /**
+     * This introduction method just prints out the introduction of the player
+     * and asks them if they are ready to play the game.
+     * @param theUserInput (Scanner)
+     * @return
+     */
+    public static boolean introduction(Scanner theUserInput) {
         System.out.println("------------------ Welcome!!! -------------------");
         System.out.println("---------------- Hear Ye Hear Ye ----------------");
         System.out.println("A long time ago, a warrior had challenged" +
@@ -29,7 +61,7 @@ public class DungeonAdventure {
                 "Petteia, but \n       he lost and he paid with his life. \n" +
                 "\nNo one has challenged him ever again, but you my child,");
         System.out.println("You wish to challenge him?");
-        return (yesORNo(userInput));
+        return (yesORNo(theUserInput));
     }
     /**
      * This method is responsible for making sure the user inputs a name for the hero,
@@ -56,19 +88,27 @@ public class DungeonAdventure {
 
     }
 
-    public static void mover(final Scanner userInput,
+    /**
+     * This is the driver method which makes sure that the player is alive and
+     * performs multiple room and dungeon check to main the player and room
+     * inventory the with the use of other classes.
+     * @param theUserInput (Scanner)
+     * @param theHero (Hero)
+     * @param theDungeonSize (Int Size of the dungeon)
+     * @param theDungeon (Dungeon)
+     * @param theMonster (Monster)
+     */
+    public static void mover(final Scanner theUserInput,
                              final Hero theHero,
-                             final int dungeonSize,
+                             final int theDungeonSize,
                              final Dungeon theDungeon,
                              final Monster theMonster) {
 
-        if (theHero.alive()){
-
-        }else {
-
+        // Checks if the cheat is enabled
+        if (theDungeon.getMyCheat()) {
+            theDungeon.revealAll();
         }
         if (theHero.alive()) {
-
             Point location = theHero.getCharacterLocation();
             Room myRoom = theDungeon.getContent(theHero.getCharacterLocationY(),theHero.getCharacterLocationX());
             myRoom.exploreTheRoom();
@@ -77,7 +117,7 @@ public class DungeonAdventure {
                 String potionChoice = ("You have unused potions, you can press 'y' to use your item 'n' for no");
                 System.out.println(potionChoice);
                 System.out.print("These are your available potions " + theHero.getHeroSatchel());
-                if (yesORNo(userInput)){
+                if (yesORNo(theUserInput)){
                     if (theHero.getHeroSatchel().contains("Vision Potion")) {
                         theDungeon.visionPotionUser(theHero.getCharacterLocation());
                         theHero.removeSatchelItem("Vision Potion");
@@ -94,13 +134,14 @@ public class DungeonAdventure {
             }
 
             myRoom.setisPlayerinRoom(true);
-            System.out.println(theDungeon);   //Prints dungeon
-            roomItemList = checkRoom(theHero, roomItemList, theMonster, userInput, theDungeon);
+            System.out.println(theDungeon);
+            roomItemList = checkRoom(theHero, roomItemList, theMonster, theUserInput, theDungeon);
             System.out.print("This room has: ");
             System.out.println(roomItemList);
 
             heroItemPicker(roomItemList, myRoom, theHero);
-            if (!isHeroAtExit(myRoom, theHero, userInput)){
+
+            if (!isHeroAtExit(myRoom, theHero, theUserInput)){
                 if (!theHero.alive()){
                     System.out.println("You came here with such life yet here you lie");
                     System.out.println("               lifeless.");
@@ -109,7 +150,12 @@ public class DungeonAdventure {
                     System.out.println(theHero);
                     System.out.print(theHero.getCharacter_Name()+ "'s Inventory: ");
                     System.out.println(theHero.getHeroSatchel());
-                    String direction = directionChecker(userInput, location, dungeonSize);
+                    String direction = directionChecker(theUserInput, location, theDungeonSize);
+                    if (direction.equals("k")){
+                        for (String key : theDungeon.mapLegend()) {
+                            System.out.println(key);
+                        }
+                    }
                     if (direction.equals("n")){
                         theHero.setCharacterLocationY(-1);
                     }
@@ -122,28 +168,27 @@ public class DungeonAdventure {
                     if (direction.equals("w")){
                         theHero.setCharacterLocationX(-1);
                     }
-
-
-
                     myRoom.setisPlayerinRoom(false);
                 }
             }
-
-
-
-
-
         }
-
-
-
-
     }
-    public static boolean isHeroAtExit(final Room theRoom, final Hero theHero, final Scanner userInput) {
+
+    /**
+     * This method checks to see if the hero is standing in a room with an exit.
+     * This method also asks the player if they would like to exit the dungeon through
+     * the door.
+     * @param theRoom
+     * @param theHero
+     * @param theUserInput
+     * @return (Boolean, if the player is on the exit or not)
+     */
+    public static boolean isHeroAtExit(final Room theRoom, final Hero theHero, final Scanner theUserInput) {
         if (theRoom.getHasExit()) {
             System.out.println("You are on the exit!");
             if (theHero.hasBothCrowns()) {
-                if (yesORNo(userInput)) {
+                System.out.println("Would you like to exit the dungeon?");
+                if (yesORNo(theUserInput)) {
                     System.out.println("               You did great out there!");
                     System.out.println("the programmer didn't even notice the missing coding crowns.");
                     theHero.killCharacter();
@@ -156,17 +201,22 @@ public class DungeonAdventure {
         }
         return false;
     }
-    public static boolean yesORNo(final Scanner userInput) {
+
+    /**
+     * This method asks the user for a yes or a no answer and insures the input is correct.
+     * @param theUserInput (Scanner)
+     * @return (Boolean YES or No)
+     */
+    public static boolean yesORNo(final Scanner theUserInput) {
         boolean correctAnswer = false;
         String choice = null;
         while (!correctAnswer) {
             System.out.print("'y' for yes, 'n' for no: ");
 
-            if (userInput.hasNext()) {
-                choice = userInput.next();
+            if (theUserInput.hasNext()) {
+                choice = theUserInput.next();
 
                 if (choice.equals("n") || choice.equals("y")) {
-                    correctAnswer = true;
                     if (choice.equals("y")) {
                         return true;
                     } else {
@@ -177,11 +227,18 @@ public class DungeonAdventure {
                 }
             } else {
                 System.out.println("Invalid Input\n");
-                userInput.next();
+                theUserInput.next();
             }
         }
-    return false;
+        return false;
     }
+
+    /**
+     * This method takes the items from the room inventory and deposits the items into the hero's inventory.
+     * @param theRoomItems (Items present in the room)
+     * @param theRoom (The room object)
+     * @param theHero (The hero object)
+     */
     public static void heroItemPicker(final ArrayList<String> theRoomItems,
                                       final Room theRoom,
                                       final Hero theHero) {
@@ -218,10 +275,22 @@ public class DungeonAdventure {
         }
 
     }
+
+    /**
+     * This method checks the room for monster and pits, if a monster is present
+     * this method initiates a fight, if there is a pit then this method reduces player's
+     * health to accommodate for the fall.
+     * @param theHero
+     * @param theRoomItems
+     * @param theMonster
+     * @param theUserInput
+     * @param theDungeon
+     * @return (Returns an updated list of the room)
+     */
     public static ArrayList<String> checkRoom(final Hero theHero,
                           final ArrayList<String> theRoomItems,
                           final Monster theMonster,
-                          final Scanner userInput, final Dungeon theDungeon) {
+                          final Scanner theUserInput, final Dungeon theDungeon) {
         ArrayList<String> copyList = (ArrayList)(theRoomItems.clone());
         for (String theItem: copyList) {
             if (theItem.equals("Monster!")){
@@ -233,7 +302,7 @@ public class DungeonAdventure {
                     theMonster.attacks(theHero);
                     roundCounter++;
                     System.out.print("END OF ROUND, PRESS ANY KEY TO CONTINUE");
-                    userInput.nextLine();
+                    theUserInput.nextLine();
                 } if (!theMonster.alive()){
                     theRoomItems.remove("Monster!");
                     System.out.println(theDungeon);
@@ -247,8 +316,15 @@ public class DungeonAdventure {
 
         }
 
+    /**
+     * This method takes in the user input and validates the direction that the user picks.
+     * @param userInput (Scanner)
+     * @param theLocation (The location of the player)
+     * @param theDungeonSize (The size of the dungeon)
+     * @return (Validated direction that a user can go into)
+     */
         public static String directionChecker(final Scanner userInput, final Point theLocation, final int theDungeonSize){
-        String choices = "Please select your movement(n for North, s for South, e for East, w for West)";
+        String choices = "Please select your movement(n for North, s for South, e for East, w for West or k for Map Legend)";
         ArrayList<String> choiceList = availableChoices(theLocation, theDungeonSize);
         String direction = null;
         boolean correctAnswer = false;
@@ -261,7 +337,10 @@ public class DungeonAdventure {
             if (userInput.hasNext()) {
                 direction = userInput.next();
 
-                if (direction.equals("n") || direction.equals("s") || direction.equals("w") || direction.equals("e")) {
+                if (direction.equals("n") || direction.equals("s") || direction.equals("w") || direction.equals("e") || direction.equals("k")) {
+                    if (direction.equals("k")){
+                        return direction;
+                    }
                     if (choiceList.contains(direction)){
                         correctAnswer = true;
                     }
@@ -279,6 +358,13 @@ public class DungeonAdventure {
         }
         return direction;
     }
+
+    /**
+     * This method insures that the user's direction choice does not go out of bounds.
+     * @param theLocation
+     * @param theSize (The size of the dungeon)
+     * @return (The list contains the valid directions that a user can take)
+     */
     public static ArrayList<String> availableChoices(final Point theLocation, final int theSize) {
         ArrayList<String> availableChoices = new ArrayList<>();
         boolean north = theLocation.y > 0;
@@ -298,3 +384,4 @@ public class DungeonAdventure {
 
     }
 }
+//END

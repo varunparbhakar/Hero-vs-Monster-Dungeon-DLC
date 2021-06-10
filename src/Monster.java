@@ -1,13 +1,13 @@
-
 /*
  * Varun Parbhakar
  *
  * TCSS-143
- * Assignment 2
+ * Heroes VS Monster (Dungeon DLC)
  */
 /**
  * This abstract class contains all of the necessary instance methods
  * for all of the character that inherit from this Monster class.
+ * @author Varun Parbhakar
  */
 public abstract class Monster extends DungeonCharacter {
     private double myChance2Heal;
@@ -170,8 +170,7 @@ public abstract class Monster extends DungeonCharacter {
             return true;
         }
     }
-
-
 }
+//END
 
 

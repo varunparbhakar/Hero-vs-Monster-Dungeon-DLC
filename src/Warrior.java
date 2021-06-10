@@ -1,12 +1,12 @@
-
 /*
  * Varun Parbhakar
  *
  * TCSS-143
- * Assignment 2
+ * Heroes VS Monster (Dungeon DLC)
  */
 /**
  * This is a subclass of Hero
+ * @author Varun Parbhakar
  */
 public class Warrior extends Hero {
 
@@ -50,3 +50,4 @@ public class Warrior extends Hero {
 
     }
 }
+//END

@@ -1,12 +1,12 @@
-
 /*
  * Varun Parbhakar
  *
  * TCSS-143
- * Assignment 2
+ * Heroes VS Monster (Dungeon DLC)
  */
 /**
  * This is a subclass of Monster.
+ * @author Varun Parbhakar
  */
 public class Skeleton extends Monster {
 
@@ -27,3 +27,4 @@ public class Skeleton extends Monster {
                 50);
     }
 }
+//END

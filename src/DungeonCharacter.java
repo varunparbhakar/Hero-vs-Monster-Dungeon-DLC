@@ -2,14 +2,14 @@
  * Varun Parbhakar
  *
  * TCSS-143
- * Assignment 2
+ * Heroes VS Monster (Dungeon DLC)
  */
 import java.util.Random;
 import java.util.Scanner;
 /**
  * This abstract class is the parent class to Hero and Monster,
  * this class contains the very basic attributes of a Dungeon Character.
- *
+ * @author Varun Parbhakar
  */
 public abstract class DungeonCharacter {
     // Scanner and Random number generator for all of the subclasses.
@@ -296,3 +296,4 @@ public abstract class DungeonCharacter {
     }
 
 }
+//END

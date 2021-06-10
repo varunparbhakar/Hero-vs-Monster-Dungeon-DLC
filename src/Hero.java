@@ -1,9 +1,8 @@
-
 /*
  * Varun Parbhakar
  *
  * TCSS-143
- * Assignment 2
+ * Heroes VS Monster (Dungeon DLC)
  */
 
 import java.awt.*;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 /**
  * This abstract class contains all of the necessary instance methods
  * for all of the character that inherit from this hero class.
+ * @author Varun Parbhakar
  */
 public abstract class Hero extends DungeonCharacter {
     private double myChance2Block;
@@ -94,9 +94,18 @@ public abstract class Hero extends DungeonCharacter {
     protected int specialDamageGenerator() {
         return super.damageRangeCalculator(mySpecialSkill_MinDamage, mySpecialSkill_MaxDamage);
     }
+
+    /**
+     * This method generates a random value and heals the player accordingly.
+     */
     protected void healingPotion() {
         super.setMyCharacter_HealthPoints(randomGen.nextInt(20));
     }
+
+    /**
+     * This method generates a random value and reduces that value from the
+     * character's healthpoints.
+     */
     protected void heroTakesDamage() {
         super.setMyCharacter_HealthPoints(-randomGen.nextInt(30));
     }
@@ -287,60 +296,119 @@ public abstract class Hero extends DungeonCharacter {
             return true;
         }
     }
+
+    /**
+     * This method return the location of the character as a point object.
+     * @return
+     */
     protected Point getCharacterLocation() {
         Point location = new Point(myCharacterLocationX, myCharacterLocationY);
         return location;
     }
+
+    /**
+     * This method sets the Y coordinate of the dungeon character.
+     * @param theY
+     */
     protected void setCharacterLocationY(final int theY) {
         myCharacterLocationY += theY;
     }
+
+    /**
+     * This method sets the X coordinate of the dungeon character.
+     * @param theX
+     */
     protected void setCharacterLocationX(final int theX) {
         myCharacterLocationX += theX;
     }
+
+    /**
+     * This method return the Y coordinate of the character.
+     * @return
+     */
     protected int getCharacterLocationY() {
         return myCharacterLocationY;
     }
+
+    /**
+     * This method return the X coordinate of the character.
+     * @return
+     */
     protected int getCharacterLocationX() {
         return myCharacterLocationX;
     }
 
+    /**
+     * This method sets the location of the character.
+     * @param theX
+     * @param theY
+     */
     protected void setCharacterLocation(final int theX, final int theY) {
         myCharacterLocationY = theY;
         myCharacterLocationX = theX;
     }
+
+    /**
+     * This method adds the passed item to the hero's inventory.
+     * @param theItem
+     */
     protected void addItem2Satchel(final String theItem) {
         mySatchel.add(theItem);
 
     }
+
+    /**
+     * This method removes the passed item from the hero's inventory.
+     * @param theItem
+     */
     protected void removeSatchelItem(final String theItem) {
         mySatchel.remove(theItem);
 
     }
+
+    /**
+     * This method return the hero's inventory.
+     * @return
+     */
     protected ArrayList<String> getHeroSatchel(){
         return mySatchel;
     }
+
+    /**
+     * This method return a boolean to indicate if the hero has both of the crowns or not.
+     * @return
+     */
     protected boolean hasBothCrowns() {
         return (mySatchel.contains("Coding Crown") && mySatchel.contains("Second Coding Crown"));
     }
-    protected int getMyHealingPotions(){
-        return myHealingPotions;
-    }
-    protected int getMyVisionPotions(){
-        return myVisionPotions;
-    }
-    protected int getMyCrownPieces(){
-        return myCrownPieces;
-    }
+
+    /**
+     * This methods adds 1 to the crown piece field.
+     */
     protected void addCrownPiece(){
         myCrownPieces++;
 
     }
+
+    /**
+     * This methods adds 1 to the healing potion field.
+     */
     protected  void addHealingPotion() {
         myHealingPotions++;
     }
+
+    /**
+     * This methods adds 1 to the vision potion field.
+     */
     protected void addVisionPotion(){
         myVisionPotions++;
     }
+
+    /**
+     * This is toString method for the hero which prints out the health, vision potion,
+     * healing potions and coding crown.
+     * @return String (Stats)
+     */
     public String toString() {
         String stats = ("Name: " + getCharacter_Name()
                 + "\nHealth: " + super.getCharacter_HealthPoints()
@@ -349,8 +417,7 @@ public abstract class Hero extends DungeonCharacter {
                 + "\nCoding Crowns found: " + myCrownPieces);
     return stats;
     }
-
-
 }
+//END
 
 
