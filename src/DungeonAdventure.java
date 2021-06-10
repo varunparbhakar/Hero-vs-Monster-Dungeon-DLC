@@ -1,19 +1,23 @@
+import javax.xml.transform.Source;
 import java.awt.*;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DungeonAdventure {
     public static void main(String[] args) {
         Scanner userInput = new Scanner(System.in);
-        Hero hero = new Warrior("Varun");
-        Monster monster = new Skeleton("Null Pointer");
-        int myDungeonSize = 4;
-        Dungeon myDungeon = new Dungeon(myDungeonSize, hero);
+        if(introduction(userInput)) {
+            Hero hero = new Warrior(heroName(userInput));
+            Monster monster = new Skeleton("Null Pointer");
+            int myDungeonSize = 5;
+            Dungeon myDungeon = new Dungeon(myDungeonSize, hero);
 
 
-        while(hero.alive()) {
-            mover(userInput, hero, myDungeonSize, myDungeon, monster);
+            while(hero.alive()) {
+                mover(userInput, hero, myDungeonSize, myDungeon, monster);
 
+            }
         }
     }
     // return on this method
@@ -24,9 +28,32 @@ public class DungeonAdventure {
                 " the creator, \n the programmer himself, to a round of " +
                 "Petteia, but \n       he lost and he paid with his life. \n" +
                 "\nNo one has challenged him ever again, but you my child,");
-        System.out.println("You wish to challenge him?(Yes/No): ");
-        String response = userInput.next();
-        return false;
+        System.out.println("You wish to challenge him?");
+        return (yesORNo(userInput));
+    }
+    /**
+     * This method is responsible for making sure the user inputs a name for the hero,
+     * this method is also performs input validation.
+     *
+     * @return String (The name of the hero)
+     */
+    public static String heroName(final Scanner userInput) {
+        boolean correctAnswer = false;
+        String heroName = null;
+
+        while (!correctAnswer) {
+            System.out.print("Please enter a name for your hero: ");
+            if (userInput.hasNextInt() || userInput.hasNextDouble()) {
+                System.out.println("Invalid input");
+                userInput.next();
+            } else {
+                heroName = userInput.next();
+                correctAnswer = true;
+            }
+
+        }
+        return heroName;
+
     }
 
     public static void mover(final Scanner userInput,
@@ -48,42 +75,21 @@ public class DungeonAdventure {
             ArrayList<String> roomItemList = (ArrayList)(myRoom.getMyRoomInventory()).clone();
             if (theHero.getHeroSatchel().contains("Vision Potion") || theHero.getHeroSatchel().contains("Healing Potion")) {
                 String potionChoice = ("You have unused potions, you can press 'y' to use your item 'n' for no");
-                String choice = null;
-                boolean correctAnswer = false;
-                while (!correctAnswer) {
-                    System.out.println(potionChoice);
-                    System.out.print("These are your available potions " + theHero.getHeroSatchel());
-
-                    if (userInput.hasNext()) {
-                        choice = userInput.next();
-
-                        if (choice.equals("n") || choice.equals("y")) {
-                            correctAnswer = true;
-                            if (choice.equals("y")){
-                                if (theHero.getHeroSatchel().contains("Vision Potion")) {
-                                    theDungeon.visionPotionUser(theHero.getCharacterLocation());
-                                    theHero.removeSatchelItem("Vision Potion");
-                                }
-                                if (theHero.getHeroSatchel().contains("Healing Potion")) {
-                                    theHero.healingPotion();
-                                    theHero.removeSatchelItem("Healing Potion");
-                                }
-                                if (theHero.getHeroSatchel().contains("Vision Potion") && theHero.getHeroSatchel().contains("Healing Potion")) {
-                                    theHero.removeSatchelItem("Healing Potion");
-                                    theHero.removeSatchelItem("Vision Potion");
-                                }
-                            }
-
-                        } else {
-                            System.out.println("Please select the correct answer");
-
-                        }
-
-                    } else {
-                        System.out.println("Invalid Input\n");
-                        userInput.next();
+                System.out.println(potionChoice);
+                System.out.print("These are your available potions " + theHero.getHeroSatchel());
+                if (yesORNo(userInput)){
+                    if (theHero.getHeroSatchel().contains("Vision Potion")) {
+                        theDungeon.visionPotionUser(theHero.getCharacterLocation());
+                        theHero.removeSatchelItem("Vision Potion");
                     }
-
+                    if (theHero.getHeroSatchel().contains("Healing Potion")) {
+                        theHero.healingPotion();
+                        theHero.removeSatchelItem("Healing Potion");
+                    }
+                    if (theHero.getHeroSatchel().contains("Vision Potion") && theHero.getHeroSatchel().contains("Healing Potion")) {
+                        theHero.removeSatchelItem("Healing Potion");
+                        theHero.removeSatchelItem("Vision Potion");
+                    }
                 }
             }
 
@@ -94,34 +100,87 @@ public class DungeonAdventure {
             System.out.println(roomItemList);
 
             heroItemPicker(roomItemList, myRoom, theHero);
+            if (!isHeroAtExit(myRoom, theHero, userInput)){
+                if (!theHero.alive()){
+                    System.out.println("You came here with such life yet here you lie");
+                    System.out.println("               lifeless.");
+                    System.out.println("        Better Luck Next time!");
+                } else {
+                    System.out.println(theHero);
+                    System.out.print(theHero.getCharacter_Name()+ "'s Inventory: ");
+                    System.out.println(theHero.getHeroSatchel());
+                    String direction = directionChecker(userInput, location, dungeonSize);
+                    if (direction.equals("n")){
+                        theHero.setCharacterLocationY(-1);
+                    }
+                    if (direction.equals("s")){
+                        theHero.setCharacterLocationY(1);
+                    }
+                    if (direction.equals("e")){
+                        theHero.setCharacterLocationX(1);
+                    }
+                    if (direction.equals("w")){
+                        theHero.setCharacterLocationX(-1);
+                    }
 
-            System.out.println(theHero.showHeroStats());
-            System.out.print(theHero.getCharacter_Name()+ "'s Inventory: ");
-            System.out.println(theHero.getHeroSatchel());
 
 
-            String direction = directionChecker(userInput, location, dungeonSize);
-            if (direction.equals("n")){
-                theHero.setCharacterLocationY(-1);
+                    myRoom.setisPlayerinRoom(false);
+                }
             }
-            if (direction.equals("s")){
-                theHero.setCharacterLocationY(1);
-            }
-            if (direction.equals("e")){
-                theHero.setCharacterLocationX(1);
-            }
-            if (direction.equals("w")){
-                theHero.setCharacterLocationX(-1);
-            }
 
 
 
-            myRoom.setisPlayerinRoom(false);
+
+
         }
 
 
 
 
+    }
+    public static boolean isHeroAtExit(final Room theRoom, final Hero theHero, final Scanner userInput) {
+        if (theRoom.getHasExit()) {
+            System.out.println("You are on the exit!");
+            if (theHero.hasBothCrowns()) {
+                if (yesORNo(userInput)) {
+                    System.out.println("               You did great out there!");
+                    System.out.println("the programmer didn't even notice the missing coding crowns.");
+                    theHero.killCharacter();
+                    return true;
+                }
+            } else {
+                System.out.println("You have to keep looking for more treasure!");
+                return false;
+            }
+        }
+        return false;
+    }
+    public static boolean yesORNo(final Scanner userInput) {
+        boolean correctAnswer = false;
+        String choice = null;
+        while (!correctAnswer) {
+            System.out.print("'y' for yes, 'n' for no: ");
+
+            if (userInput.hasNext()) {
+                choice = userInput.next();
+
+                if (choice.equals("n") || choice.equals("y")) {
+                    correctAnswer = true;
+                    if (choice.equals("y")) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    System.out.println("Please select the correct response");
+                }
+            } else {
+                System.out.println("Invalid Input\n");
+                userInput.next();
+            }
+        }
+    return false;
     }
     public static void heroItemPicker(final ArrayList<String> theRoomItems,
                                       final Room theRoom,
@@ -130,22 +189,26 @@ public class DungeonAdventure {
             if (theItem.equals("Coding Crown")){
                 theRoom.pickUP(theItem, theHero);
                 System.out.println("You have picked up the Coding Crown!");
+                theHero.addCrownPiece();
                 continue;
 
             }if (theItem.equals("Second Coding Crown")){
                 theRoom.pickUP(theItem, theHero);
+                theHero.addCrownPiece();
                 System.out.println("You have picked up the Second Coding Crown!");
                 continue;
 
             }
             if (theItem.equals("Healing Potion")){
                 theRoom.pickUP(theItem, theHero);
+                theHero.addHealingPotion();
                 System.out.println("You have picked up the Healing Potion!");
                 continue;
 
             }
             if (theItem.equals("Vision Potion")){
                 theRoom.pickUP(theItem, theHero);
+                theHero.addVisionPotion();
                 System.out.println("You have picked up the Vision Potion!");
 
                 continue;
