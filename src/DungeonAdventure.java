@@ -29,6 +29,9 @@ public class DungeonAdventure {
                 Monster monster = new Skeleton("Null Pointer");
                 int myDungeonSize = 5;
                 Dungeon myDungeon = new Dungeon(myDungeonSize, hero);
+                // These are the names needs to be used in order to activate the cheat
+                // I dont have a method in the Dungeon Adventure for revealing all of the
+                // room, I thought that it better fit for the Dungeon class to have that kind of power.
                 if (name.equals("Varun") || name.equals("Bryce")) {
                     myDungeon.setMyCheatEnabled();
                 }
@@ -38,12 +41,17 @@ public class DungeonAdventure {
                     mover(userInput, hero, myDungeonSize, myDungeon, monster);
 
                 }
+                System.out.println("\nThis is the dungeon fully revealed");
+                myDungeon.revealAll();
+                System.out.println(myDungeon);
                 System.out.println("\nWould you like to play again?");
                 if (!yesORNo(userInput)) {
                     playAgain = true;
                 }
 
             }
+        } else {
+            System.out.println("A wise choice, now MOVE ALONG!");
         }
     }
 
@@ -57,8 +65,8 @@ public class DungeonAdventure {
         System.out.println("------------------ Welcome!!! -------------------");
         System.out.println("---------------- Hear Ye Hear Ye ----------------");
         System.out.println("A long time ago, a warrior had challenged" +
-                " the creator, \n the programmer himself, to a round of " +
-                "Petteia, but \n       he lost and he paid with his life. \n" +
+                " the creator, \n the programmer himself, to a game of " +
+                "Labyrinth, but \n       he lost and he paid with his life. \n" +
                 "\nNo one has challenged him ever again, but you my child,");
         System.out.println("You wish to challenge him?");
         return (yesORNo(theUserInput));
@@ -296,7 +304,7 @@ public class DungeonAdventure {
             if (theItem.equals("Monster!")){
                 int roundCounter = 1;
                 while (theHero.alive() && theMonster.alive()) {
-                    System.out.println("\n\t\t\t Round: " + roundCounter + "\n");
+                    System.out.println("\t\t\t Round: " + roundCounter + "\n");
                     System.out.println("Player HP: " + theHero.getCharacter_HealthPoints() + "\t\t Monster's HP: " + theMonster.getCharacter_HealthPoints() + "\n");
                     theHero.attacks(theMonster);
                     theMonster.attacks(theHero);

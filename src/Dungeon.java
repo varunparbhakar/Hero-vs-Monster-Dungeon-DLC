@@ -80,7 +80,7 @@ public class Dungeon {
      * @return (String containing the layout of the dungeon)
      */
     public String toString() {
-        String dungeonPrint = "";
+        String dungeonPrint = "\n";
         for (ArrayList row: myDungeon) {
             for (Object myRoom : row) {
                 dungeonPrint += myRoom.toString();

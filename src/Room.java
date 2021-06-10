@@ -58,26 +58,6 @@ public class Room {
         }
         return myDisplayIcon;
     }
-
-    /**
-     * This method displays the contents of the room.
-     */
-    protected void displayContent(){
-        if (hasMy_Monster) {
-            System.out.println("This room has a monster");
-        } if (hasMy_VisionPotion) {
-            System.out.println("This room has a vision potion");
-        } if (hasMy_HealingPotion) {
-            System.out.println("This room has a healing potion");
-        } if (hasMy_Pit) {
-            System.out.println("This room has a pit");
-        } if (hasMy_Crown) {
-            System.out.println("This room has a crown");
-        }if (hasMy_2ndCrown) {
-            System.out.println("This room has the 2nd crown");
-        }
-    }
-
     /**
      * This is the explore method which searches the room and sets the icon of that room accordingly.
      */
@@ -110,7 +90,6 @@ public class Room {
                 setMyDisplayIcon("E ");
             } else if (myRoomInventory.size() > 1 && !hasMy_Entrance){
                 setMyDisplayIcon("M ");
-                displayContent();
             }
         }
     }
